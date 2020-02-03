@@ -12,9 +12,14 @@ Welcome to IoToad docs's documentation!
 
 
 
-Indices and tables
-==================
+System Design
+=============
+[System design: diagram + explanation]
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+APIs
+=====
+[component-influx and agent-sp_controller APIs]
+
+Code
+====
+[Modules code]
