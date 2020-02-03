@@ -1,0 +1,13 @@
+# sphinx build folder
+_build
+
+# JetBrains
+.idea
+
+# Python environments and requirements
+.env
+Pipfile
+Pipfile.lock
+requirements.txt
+
+
