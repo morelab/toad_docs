@@ -6,10 +6,6 @@
 Welcome to IoToad docs's documentation!
 =======================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
 
 
 System Design
@@ -18,7 +14,12 @@ System Design
 
 APIs
 =====
-[component-influx and agent-sp_controller APIs]
+Main API:
+
+.. raw:: html
+   :file: _static/api-main.html
+Influx API: :doc:`api-influx`
+sp_controller API: :doc:`api-sp_controller`
 
 Code
 ====
