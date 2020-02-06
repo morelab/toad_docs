@@ -3,4 +3,4 @@ API Influx
 =============
 
 .. raw:: html
-   :file: _static/api-influx.html
+   :file: _static/html/api-influx.html
