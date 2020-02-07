@@ -1,6 +1,6 @@
-.. _api-influx:
-API Influx
-=============
+===========
+API influx
+===========
 
 .. raw:: html
    :file: _static/html/api-influx.html

@@ -14,7 +14,7 @@ tags:
     description: Path for reading data
 paths:
   /in/{agent}:
-    post:
+    put:
       tags:
         - in
       summary: Send write/update request to Agent
@@ -22,7 +22,7 @@ paths:
       parameters:
         - name: agent
           in: path
-          description: Agent ID, which represents the MQTT topic where the Agent listens. 
+          description: Agent ID, which represents the MQTT topic where the Agent listens.
           required: true
           schema:
             type: string
@@ -44,7 +44,7 @@ paths:
       parameters:
         - name: component
           in: path
-          description: API component ID, which represents the MQTT topic where the API component. 
+          description: API component ID, which represents the MQTT topic where the API component.
           required: true
           schema:
             type: string
@@ -76,7 +76,36 @@ components:
           type: string
           example: "{'status': 0}"
     OutObject:
-      type: object
+      type: array
+      items:
+        type: object
+        properties:
+          e:
+            $ref: '#/components/schemas/EventObject'
+          bn:
+            type: string
+            description: URI path concatenating the Device ID and the type of resource. 'deviceID/resourceType'
+            example: "sp_r3c4/power"
+          bu:
+            type: string
+            description: Resource unit
+            example: "W"
+
+    EventObject:
+      type: array
+      items:
+        type: object
+        properties:
+          v:
+            type: number
+            format: float
+            description: Value
+            example: 40.2
+          t:
+            type: number
+            format: double
+            description: POSIX seconds (seconds since the epoch)
+            example: 12345678
       
       
       

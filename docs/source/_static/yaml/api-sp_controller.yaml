@@ -1,0 +1,154 @@
+openapi: 3.0.0
+info:
+  version: '1.0.0'
+  title: 'agent-sp_controller'
+  description: 'SmartPlug Controller (sp_controller) agent API'
+servers:
+  - url: https://iotoad.org/
+
+paths:
+  /in/sp_controller/:
+    put:
+      summary: Switch SmartPlugs belonging to topics in the request body
+      operationId: controlBySubtopic
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/ManyRequestBody'
+  /in/sp_controller/{id}/:
+    put:
+      summary: Switch SmartPlug with ID {id}
+      operationId: controlByID
+      parameters:
+        - name: id
+          in: path
+          description: Identifier of a SmartPlug 
+          required: true
+          schema:
+            type: string
+            pattern: "[^/]+"
+            example: "sp_r3c4"
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/SingleRequestBody'
+  /in/sp_controller/column/:
+    put:
+      summary: Switch SmartPlugs filtering by columns
+      operationId: controlByManyColumns
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/ManyByNumberRequestBody'
+  /in/sp_controller/column/{column}/:
+    put:
+      summary: Switch SmartPlugs of column {column}
+      operationId: controlBySingleColumn
+      parameters:
+        - name: column
+          in: path
+          description: Number of SmartPlug column
+          required: true
+          schema:
+            type: string
+            pattern: "^[\\d]+$"
+            example: "1"
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/SingleRequestBody'
+  /in/sp_controller/row/:
+    put:
+      summary: Turn of SmartPlugs filtering by rows
+      operationId: controlByManyRows
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/ManyByNumberRequestBody'
+  /in/sp_controller/row/{row}/:
+    put:
+      summary: Switch SmartPlugs of row {row}
+      operationId: controlBySingleRow
+      parameters:
+        - name: row
+          in: path
+          description: Number of SmartPlug row
+          required: true
+          schema:
+            type: string
+            pattern: "^[\\d]+$"
+            example: "1"
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+      requestBody:
+        $ref: '#/components/requestBodies/SingleRequestBody'
+
+components:
+  schemas:
+    ControlSingle:
+      type: object
+      properties:
+        payload:
+          type: string
+          example: "{\"status\": 0}"
+    ControlMany:
+      type: object
+      properties:
+        subtopics:
+          description: IDs of SmartPlugs to send commands to
+          type: array
+          items:
+            type: string
+            format: uri
+          example: ["sp_r3c4", "sp_r3c5", "row/1", "column/2"]
+        payload:
+          type: string
+          example: "{\"status\": 0}"
+    ControlManyByNumber:
+      type: object
+      properties:
+        subtopics:
+          description: Columns of SmartPlugs to send commands to
+          type: array
+          items:
+            type: string
+            format: uri
+          example: ["1", "2", "3", "4"]
+        payload:
+          type: string
+          example: "{\"status\": 0}"
+
+  requestBodies:
+    SingleRequestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ControlSingle'
+    ManyRequestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ControlMany'
+    ManyByNumberRequestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ControlManyByNumber'

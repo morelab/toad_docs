@@ -62,12 +62,10 @@ window.onload = function() {
     deepLinking: true,
     presets: [
       SwaggerUIBundle.presets.apis,
-      SwaggerUIStandalonePreset
     ],
     plugins: [
       SwaggerUIBundle.plugins.DownloadUrl
     ],
-    layout: "StandaloneLayout"
   })
 
   window.ui = ui
@@ -77,6 +75,9 @@ window.onload = function() {
 
 </html>
 """
+with open(sys.argv[1], "r") as file:
+    input_file = file.read()
+    spec = yaml.load(input_file, Loader=yaml.FullLoader)
 
-spec = yaml.load(sys.stdin, Loader=yaml.FullLoader)
-sys.stdout.write(TEMPLATE % json.dumps(spec))
+with open(sys.argv[2], "w") as file:
+    file.write(TEMPLATE % json.dumps(spec))

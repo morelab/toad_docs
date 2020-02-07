@@ -1,76 +1,63 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <title>Swagger UI</title>
-
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700"
           rel="stylesheet">
-
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui.css">
-
     <style>
-
         html {
-
             box-sizing: border-box;
-
             overflow: -moz-scrollbars-vertical;
-
             overflow-y: scroll;
-
         }
 
         *,
         *:before,
         *:after {
-
             box-sizing: inherit;
-
         }
 
         body {
-
             margin: 0;
-
             background: #fafafa;
-
         }
-
     </style>
-
 </head>
-
 <body>
 
 <div id="swagger-ui"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui-bundle.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.2.2/swagger-ui-standalone-preset.js"></script>
-
 <script>
-
     window.onload = function () {
 
         var spec = {
             "openapi": "3.0.0",
-            "info": {"title": "component-influx", "description": "influx copmponent API"},
-            "servers": [{"description": "IoToad API endpoint", "url": "https://iotoad.org/api/out/influx"}],
+            "info": {
+                "title": "component-influx",
+                "description": "Influx component (InfluxDB data queries) API."
+            },
+            "servers": [{"description": "IoToad API endpoint", "url": "https://iotoad.org/api"}],
             "paths": {
-                "/{measurement}": {
+                "/out/influx/{database}/{measurement}": {
                     "get": {
                         "summary": "Send write/update request to Agent",
-                        "operationId": "outRequest",
+                        "operationId": "powerRequest",
+                        "tags": ["Generic"],
                         "parameters": [{
+                            "name": "database",
+                            "in": "path",
+                            "description": "InfluxDB Database name",
+                            "required": true,
+                            "schema": {"type": "string", "pattern": "[^/]+", "example": "sp"}
+                        }, {
                             "name": "measurement",
                             "in": "path",
-                            "description": "Measurement type that is being queried.",
+                            "description": "InfluxDB measurement",
                             "required": true,
                             "schema": {"type": "string", "pattern": "[^/]+", "example": "power"}
                         }, {
@@ -122,7 +109,123 @@
                         "responses": {
                             "200": {
                                 "description": "Successful operation",
-                                "content": {"application/json": {"schema": {"$ref": "#/components/schemas/OutObject"}}}
+                                "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PowerOutObject"}}}
+                            }, "405": {"description": "Invalid input"}
+                        }
+                    }
+                }, "/out/influx/sp/power": {
+                    "get": {
+                        "summary": "Send write/update request to Agent",
+                        "operationId": "genericRequest",
+                        "tags": ["SmartPlug API"],
+                        "parameters": [{
+                            "name": "operation",
+                            "in": "query",
+                            "required": false,
+                            "schema": {
+                                "type": "string",
+                                "enum": ["count", "distinct", "integral", "mean", "median", "mode", "spread", "stddev", "sum", "bottom", "first", "last", "max", "min", "percentile", "sample", "top"]
+                            },
+                            "description": "Aggregations and Selectors that can be used when querying. For more information check the following url: https://docs.influxdata.com/influxdb/v1.7/query_language/functions/"
+                        }, {
+                            "name": "id",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "string", "example": "sp_r0c2"},
+                            "description": "Device ID"
+                        }, {
+                            "name": "type",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "string", "enum": ["w", "g", "p"]},
+                            "description": "Device type: w (Workstation), g (Group Room) or p (Printer)"
+                        }, {
+                            "name": "row",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "integer", "nullable": true, "example": 1},
+                            "description": "Device row. It is nullable, if it has no row"
+                        }, {
+                            "name": "column",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "integer", "nullable": true, "example": 1},
+                            "description": "Device column. It is nullable, if it has no column"
+                        }, {
+                            "name": "from",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "number", "format": "double", "example": 12345678},
+                            "description": "Time lower limit of the data that is being retrieved (POSIX seconds)"
+                        }, {
+                            "name": "to",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "number", "format": "double", "example": 12345678},
+                            "description": "Time upper limit of the data that is being retrieved (POSIX seconds)"
+                        }],
+                        "responses": {
+                            "200": {
+                                "description": "Successful operation",
+                                "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PowerOutObject"}}}
+                            }, "405": {"description": "Invalid input"}
+                        }
+                    }
+                }, "/out/influx/sp/status": {
+                    "get": {
+                        "summary": "Send write/update request to Agent",
+                        "operationId": "statusRequest",
+                        "tags": ["SmartPlug API"],
+                        "parameters": [{
+                            "name": "operation",
+                            "in": "query",
+                            "required": false,
+                            "schema": {
+                                "type": "string",
+                                "enum": ["count", "distinct", "integral", "mean", "median", "mode", "spread", "stddev", "sum", "bottom", "first", "last", "max", "min", "percentile", "sample", "top"]
+                            },
+                            "description": "Aggregations and Selectors that can be used when querying. For more information check the following url: https://docs.influxdata.com/influxdb/v1.7/query_language/functions/"
+                        }, {
+                            "name": "id",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "string", "example": "sp_r0c2"},
+                            "description": "Device ID"
+                        }, {
+                            "name": "type",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "string", "enum": ["w", "g", "p"]},
+                            "description": "Device type: w (Workstation), g (Group Room) or p (Printer)"
+                        }, {
+                            "name": "row",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "integer", "nullable": true, "example": 1},
+                            "description": "Device row. It is nullable, if it has no row"
+                        }, {
+                            "name": "column",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "integer", "nullable": true, "example": 1},
+                            "description": "Device column. It is nullable, if it has no column"
+                        }, {
+                            "name": "from",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "number", "format": "double", "example": 12345678},
+                            "description": "Time lower limit of the data that is being retrieved (POSIX seconds)"
+                        }, {
+                            "name": "to",
+                            "in": "query",
+                            "required": false,
+                            "schema": {"type": "number", "format": "double", "example": 12345678},
+                            "description": "Time upper limit of the data that is being retrieved (POSIX seconds)"
+                        }],
+                        "responses": {
+                            "200": {
+                                "description": "Successful operation",
+                                "content": {"application/json": {"schema": {"$ref": "#/components/schemas/StatusOutObject"}}}
                             }, "405": {"description": "Invalid input"}
                         }
                     }
@@ -130,12 +233,27 @@
             },
             "components": {
                 "schemas": {
-                    "OutObject": {
+                    "GenericOutObject": {
                         "type": "array",
                         "items": {
                             "type": "object",
                             "properties": {
-                                "e": {"$ref": "#/components/schemas/EventObject"},
+                                "e": {"$ref": "#/components/schemas/GenericEventObject"},
+                                "bn": {
+                                    "type": "string",
+                                    "description": "URI path concatenating the Device ID and the type of resource. 'deviceID/resourceType'",
+                                    "example": "generic_id/generic_resource_type"
+                                },
+                                "bu": {"type": "string", "description": "Resource unit", "example": "W"}
+                            }
+                        }
+                    },
+                    "PowerOutObject": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "e": {"$ref": "#/components/schemas/PowerEventObject"},
                                 "bn": {
                                     "type": "string",
                                     "description": "URI path concatenating the Device ID and the type of resource. 'deviceID/resourceType'",
@@ -145,7 +263,37 @@
                             }
                         }
                     },
-                    "EventObject": {
+                    "StatusOutObject": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "e": {"$ref": "#/components/schemas/StatusEventObject"},
+                                "bn": {
+                                    "type": "string",
+                                    "description": "URI path concatenating the Device ID and the type of resource. 'deviceID/resourceType'",
+                                    "example": "sp_r3c4/status"
+                                },
+                                "bu": {"type": "string", "description": "Resource unit", "example": "W"}
+                            }
+                        }
+                    },
+                    "GenericEventObject": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "v": {"type": ["number", "string"], "description": "Value", "example": 40.2},
+                                "t": {
+                                    "type": "number",
+                                    "format": "double",
+                                    "description": "POSIX seconds (seconds since the epoch)",
+                                    "example": 12345678
+                                }
+                            }
+                        }
+                    },
+                    "PowerEventObject": {
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -164,44 +312,47 @@
                                 }
                             }
                         }
+                    },
+                    "StatusEventObject": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "v": {
+                                    "type": "number",
+                                    "enum": [0, 1],
+                                    "description": "0 if device is OFF, and 1 if device is ON",
+                                    "example": 0
+                                },
+                                "t": {
+                                    "type": "number",
+                                    "format": "double",
+                                    "description": "POSIX seconds (seconds since the epoch)",
+                                    "example": 12345678
+                                }
+                            }
+                        }
                     }
                 }
             }
         };
 
         // Build a system
-
         const ui = SwaggerUIBundle({
-
             spec: spec,
-
             dom_id: '#swagger-ui',
-
             deepLinking: true,
-
             presets: [
-
                 SwaggerUIBundle.presets.apis,
-
-
             ],
-
             plugins: [
-
                 SwaggerUIBundle.plugins.DownloadUrl
-
             ],
-
-
         })
 
         window.ui = ui
-
     }
-
 </script>
-
 </body>
 
 </html>
-
