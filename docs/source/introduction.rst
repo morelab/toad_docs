@@ -46,8 +46,8 @@ The gathered data is stored in a time series database (influxDB).
 Also a RESTful API is exposed through which the data can be retrieved, and
 SmartPlugs are controlled (turned ON/OFF).
 
-System's design
-----------------
+System's overview
+------------------
 The system architecture is shown in the following diagram:
 
 .. image:: _static/imgs/system-architecture.svg
@@ -100,3 +100,9 @@ Request flow: SmartPlug control command
 4. sp_controller returns a "command completed"
 5. API reads the result and responses to the HTTP request
 
+
+Design choices
+---------------
+
+:doc:`APIs <design-api>`
+~~~~~~~~~~~~~~~~~~~~~~~~~
