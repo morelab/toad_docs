@@ -9,6 +9,7 @@ build
 .venv
 .env
 venv
+env
 Pipfile
 Pipfile.lock
 
