@@ -14,7 +14,7 @@ for controlling and querying data from SmartPlugs:
   commands (turn ON/OFF).
 
 
-:doc:`Influx API <api-influx>`
+:doc:`influx API <api-influx>`
 -------------------------------
 
 :doc:`sp_controller API <api-sp_controller>`
