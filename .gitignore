@@ -6,7 +6,9 @@ build
 .idea
 
 # Python environments and requirements
+.venv
 .env
+venv
 Pipfile
 Pipfile.lock
 
