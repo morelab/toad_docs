@@ -80,29 +80,34 @@ The system architecture is shown in the following diagram:
   as the communication techonolgy with other components or
   applications.
 
-Request flow: Data query
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Request flow: Influx query
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Client makes HTTP request to API
-2. API publishes data query to MQTT
-3. Influx component reads query from MQTT and requests data to InfluxDB
-4. InfluxDB returns the data, and the Influx component publishes the result
-   to MQTT
-5. API reads the result and responses to the HTTP request
+1. Client makes HTTP request to :code:`api` and :code:`api` publishes influx query to MQTT
+2. :code:`influx_query` reads the command from MQTT
+3. :code:`influx_query` sends query to InfluxDB
+4. InfluxDB executes query and returns the result to :code:`influx_query`
+5. :code:`influx_query` publishes the result to MQTT
+6. :code:`api` reads query result from MQTT and returns an HTTP response
 
-Request flow: SmartPlug control command
+.. image:: _static/imgs/flow-influx-query.svg
+
+
+Request flow: SmartPlug command
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Client makes HTTP request to API
-2. API publishes control command to MQTT
-3. sp_controller reads the command from MQTT and sends it to the SmartPlug
-   device(s)
-4. sp_controller returns a "command completed"
-5. API reads the result and responses to the HTTP request
+1. Client makes HTTP request to :code:`api` and :code:`api`
+   publishes control command to MQTT
+2. :code:`sp_command` reads the command from MQTT 
+3. :code:`sp_command` sends command to the SmartPlug device(s)
+4. SmartPlug executes the command and :code:`sp_command` reads the resonse
+5. :code:`sp_command` publishes the response to MQTT
+6. :code:`api` reads control command response from MQTT and returns an HTTP response
 
+.. image:: _static/imgs/flow-sp-command.svg
 
 Design choices
 ---------------
 
-:doc:`APIs <design-api>`
+:doc:`REST APIs design <design-api>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -6,5 +6,5 @@ Welcome to IoToad docs's documentation!
 
    introduction
    usage
-   code
+   modules
    extensibility
