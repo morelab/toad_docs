@@ -5,6 +5,6 @@ Welcome to IoToad docs's documentation!
    :maxdepth: 2
 
    introduction
-   usage
+   api
    modules
    extensibility

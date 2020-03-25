@@ -38,12 +38,12 @@
         var spec = {
             "openapi": "3.0.0",
             "info": {
-                "title": "agent-sp_controller",
-                "description": "SmartPlug Controller (sp_controller) agent API"
+                "title": "sp_command",
+                "description": "SmartPlug Controller (sp_command) agent API"
             },
-            "servers": [{"url": "https://iotoad.org/"}],
+            "servers": [{"description": "IoToad API endpoint", "url": "https://iotoad.org/api"}],
             "paths": {
-                "/in/sp_controller/": {
+                "/in/sp_command/": {
                     "put": {
                         "summary": "Switch SmartPlugs belonging to topics in the request body",
                         "operationId": "controlBySubtopic",
@@ -54,7 +54,7 @@
                         "requestBody": {"$ref": "#/components/requestBodies/ManyRequestBody"}
                     }
                 },
-                "/in/sp_controller/{id}/": {
+                "/in/sp_command/{id}/": {
                     "put": {
                         "summary": "Switch SmartPlug with ID {id}",
                         "operationId": "controlByID",
@@ -72,7 +72,7 @@
                         "requestBody": {"$ref": "#/components/requestBodies/SingleRequestBody"}
                     }
                 },
-                "/in/sp_controller/column/": {
+                "/in/sp_command/column/": {
                     "put": {
                         "summary": "Switch SmartPlugs filtering by columns",
                         "operationId": "controlByManyColumns",
@@ -83,7 +83,7 @@
                         "requestBody": {"$ref": "#/components/requestBodies/ManyByNumberRequestBody"}
                     }
                 },
-                "/in/sp_controller/column/{column}/": {
+                "/in/sp_command/column/{column}/": {
                     "put": {
                         "summary": "Switch SmartPlugs of column {column}",
                         "operationId": "controlBySingleColumn",
@@ -101,7 +101,7 @@
                         "requestBody": {"$ref": "#/components/requestBodies/SingleRequestBody"}
                     }
                 },
-                "/in/sp_controller/row/": {
+                "/in/sp_command/row/": {
                     "put": {
                         "summary": "Turn of SmartPlugs filtering by rows",
                         "operationId": "controlByManyRows",
@@ -112,7 +112,7 @@
                         "requestBody": {"$ref": "#/components/requestBodies/ManyByNumberRequestBody"}
                     }
                 },
-                "/in/sp_controller/row/{row}/": {
+                "/in/sp_command/row/{row}/": {
                     "put": {
                         "summary": "Switch SmartPlugs of row {row}",
                         "operationId": "controlBySingleRow",

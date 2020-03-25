@@ -106,8 +106,3 @@ Request flow: SmartPlug command
 
 .. image:: _static/imgs/flow-sp-command.svg
 
-Design choices
----------------
-
-:doc:`REST APIs design <design-api>`
-~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   version: '1.0.0'
-  title: 'component-influx'
+  title: 'influx_query'
   description: 'Influx component (InfluxDB data queries) API.'
 
 servers:
@@ -9,7 +9,7 @@ servers:
     url: https://iotoad.org/api
     
 paths:
-  /out/influx/{database}/{measurement}:
+  /out/influx_query/{database}/{measurement}:
     get:
       summary: Send write/update request to Agent
       operationId: powerRequest
@@ -44,7 +44,7 @@ paths:
           required: false
           schema:
             type: string
-            example: sp_r0c2
+            example: w.r0.c2
           description: Device ID
         - name: type
           in: query
@@ -91,11 +91,11 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/PowerOutObject'
+                $ref: '#/components/schemas/SenMLDocumentPower'
         '405':
           description: Invalid input
 
-  /out/influx/sp/power:
+  /out/influx_query/sp/power:
     get:
       summary: Send write/update request to Agent
       operationId: genericRequest
@@ -114,7 +114,7 @@ paths:
           required: false
           schema:
             type: string
-            example: sp_r0c2
+            example: w.r0.c2
           description: Device ID
         - name: type
           in: query
@@ -161,11 +161,11 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/PowerOutObject'
+                $ref: '#/components/schemas/SenMLDocumentPower'
         '405':
           description: Invalid input
         
-  /out/influx/sp/status:
+  /out/influx_query/sp/status:
     get:
       summary: Send write/update request to Agent
       operationId: statusRequest
@@ -184,7 +184,7 @@ paths:
           required: false
           schema:
             type: string
-            example: sp_r0c2
+            example: w.r0.c2
           description: Device ID
         - name: type
           in: query
@@ -231,102 +231,78 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/StatusOutObject'
+                $ref: '#/components/schemas/SenMLDocumentStatus'
         '405':
           description: Invalid input
 components:
   schemas:
-    GenericOutObject:
+    SenMLDocumentPower:
       type: array
       items:
-        type: object
-        properties:
-          e:
-            $ref: '#/components/schemas/GenericEventObject'
-          bn:
-            type: string
-            description: URI path concatenating the Device ID and the type of resource. 'deviceID/resourceType'
-            example: "generic_id/generic_resource_type"
-          bu:
-            type: string
-            description: Resource unit
-            example: "W"
-    PowerOutObject:
-      type: array
-      items:
-        type: object
-        properties:
-          e:
-            $ref: '#/components/schemas/PowerEventObject'
-          bn:
-            type: string
-            description: URI path concatenating the Device ID and the type of resource. 'deviceID/resourceType'
-            example: "sp_r3c4/power"
-          bu:
-            type: string
-            description: Resource unit
-            example: "W"
-    StatusOutObject:
-      type: array
-      items:
-        type: object
-        properties:
-          e:
-            $ref: '#/components/schemas/StatusEventObject'
-          bn:
-            type: string
-            description: URI path concatenating the Device ID and the type of resource. 'deviceID/resourceType'
-            example: "sp_r3c4/status"
-          bu:
-            type: string
-            description: Resource unit
-            example: "W"
-      
-    GenericEventObject:
-      type: array
-      items:
-        type: object
-        properties:
-          v:
-            type:
-              - number
-              - string
-            description: Value
-            example: 40.2
-          t:
-            type: number
-            format: double
-            description: POSIX seconds (seconds since the epoch)
-            example: 12345678
+        anyOf:
+         - $ref: '#/components/schemas/SenMLMainMeasurementPower'
+         - $ref: '#/components/schemas/SenMLSubMeasurementPower'
+      example: [
+        {"bn": "w.r1.r2", "unit":"W"},{"v": 10.4, t: 12345678},{"v": 20.1, t: 12345679}
+      ]
+        
+    SenMLMainMeasurementPower:
+      type: object
+      properties:
+        bn:
+          type: string
+          description: String concatenating Device ID and the type of resource. 'deviceID/resourceType'
+          example: "w.r3.c4/power"
+        bu:
+          type: string
+          description: Resource unit
+          example: "W"
+          
+    SenMLSubMeasurementPower:
+      type: object
+      properties:
+        v:
+          type: number
+          description: Value
+          example: 40.2
+        t:
+          type: number
+          format: double
+          description: POSIX seconds (seconds since the epoch)
+          example: 12345678
     
-    PowerEventObject:
+    SenMLDocumentStatus:
       type: array
       items:
-        type: object
-        properties:
-          v:
-            type: number
-            format: float
-            description: Value
-            example: 40.2
-          t:
-            type: number
-            format: double
-            description: POSIX seconds (seconds since the epoch)
-            example: 12345678
-            
-    StatusEventObject:
-      type: array
-      items:
-        type: object
-        properties:
-          v:
-            type: number
-            enum: [0, 1]
-            description: 0 if device is OFF, and 1 if device is ON
-            example: 0
-          t:
-            type: number
-            format: double
-            description: POSIX seconds (seconds since the epoch)
-            example: 12345678
+        anyOf:
+         - $ref: '#/components/schemas/SenMLMainMeasurementStatus'
+         - $ref: '#/components/schemas/SenMLSubMeasurementStatus'
+      example: [
+        {"bn": "m2", "unit":"S"},{"v": 0, t: 12345678},{"v": 1, t: 12345679}, {"v": 0, t: 12345680}
+      ]
+        
+    SenMLMainMeasurementStatus:
+      type: object
+      properties:
+        bn:
+          type: string
+          description: String concatenating Device ID and the type of resource. 'deviceID/resourceType'
+          example: "w.r3.c4/power"
+        bu:
+          type: string
+          description: Resource unit
+          example: "W"
+          
+    SenMLSubMeasurementStatus:
+      type: object
+      properties:
+        v:
+          type: number
+          enum: [0, 1]
+          description: 0 if device is OFF, and 1 if device is ON
+          example: 0
+        t:
+          type: number
+          format: double
+          description: POSIX seconds (seconds since the epoch)
+          example: 12345678
