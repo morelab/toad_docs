@@ -14,7 +14,7 @@ The API let you construct queries equivalent to those of InfluxDB restricted to:
 * Query a single measurement per query
 * Filter by tags
 * Use aggregator and selectors defined in
-`InfluxDB functions <https://docs.influxdata.com/influxdb/v1.7/query_language/functions/>`_
+  `InfluxDB functions <https://docs.influxdata.com/influxdb/v1.7/query_language/functions/>`_
 
 
 URL
@@ -26,10 +26,10 @@ Examples
 ---------
 
 * :code:`iotoad.org/api/out/influx_query/sp/power?type=w`
-* :code:`iotoad.org/api/out/influx_query/sp/power?operation=sum&type=w`
-* :code:`iotoad.org/api/out/influx_query/sp/power?operation=median&type=w&row=1`
+* :code:`iotoad.org/api/out/influx_query/sp/power?operation=sum&type=w&from=1585217932.2041745`
+* :code:`iotoad.org/api/out/influx_query/sp/power?operation=median&type=w&row=1&from=1585217932.2041745&to=1585300000.2041745`
 * :code:`iotoad.org/api/out/influx_query/sp/status?operation=median&type=g`
-* :code:`iotoad.org/api/out/influx_query/sp/status?operation=sum&id=sp_r1c2`
+* :code:`iotoad.org/api/out/influx_query/sp/status?operation=sum&id=w.r1.c2`
 
 
 OpenAPI specification

@@ -1,29 +1,25 @@
-=================
-REST APIs design
-=================
+====================
+api module's design
+====================
 
-Base path of all requests:
+
+
+Base path for REST HTTP requests:
 
 * :code:`/api`
 
 Division into two routes so that the separation between reading and writing resources is clear:
 
-* :code:`api/in` to send data
-* :code:`api/out` to retrieve data
+* :ref:`api/in` to write/send data
+* :ref:`api/out` to read/retrieve data
 
 
 api/in
-+++++++
+-------
 
-Path
-_____
+**HTTP method**: :code:`PUT`
 
-HTTP method: :code:`PUT`
-
-URL: :code:`api/in/<agent>/<subpath>`
-
-Explanation
-____________
+**URL**: :code:`api/in/<agent>/<subpath>`
 
 * :code:`<agent>`: is the module to which you want to send data.
   For example :code:`sp_command/status` or :code:`sp_command/status/w.r3.c4`.
@@ -38,11 +34,7 @@ For example, our agent (sp_command) will allow you to identify
 smartplugs directly by ID or filter smartplugs by row and column but
 other agents may have completely different functionalities.
 
-Format
-_______
-
-URLs
-~~~~~
+**URL Examples**:
 
 * :code:`api/in/sp_command/m1`
 * :code:`api/in/sp_command/g0`
@@ -50,8 +42,7 @@ URLs
 * :code:`api/in/sp_command/row/1`
 * :code:`api/in/sp_command/column/2`
 
-PUT Data
-~~~~~~~~~
+**PUT Data**:
 
 .. code-block:: json
 
@@ -82,11 +73,9 @@ of: :code:`<agent>/<subtopic>`.
 Real example
 _____________
 
-HTTP REST request
-~~~~~~~~~~~~~~~~~~
-URL path: :code:`api/in/sp_command/`
+**HTTP REST request**
 
-Data:
+GET :code:`api/in/sp_command/`
 
 .. code-block:: json
 
@@ -98,16 +87,13 @@ Data:
          "payload": {"status":"OFF"}
    }
 
-MQTT publications
-~~~~~~~~~~~~~~~~~~
+**MQTT publications**
 
 It will publish two times to MQTT.
 
 **1st publication**
 
-Topic: :code:`command/sp_command/m1`
-
-Payload:
+:code:`command/sp_command/m1`
 
 .. code-block:: json
 
@@ -118,9 +104,7 @@ Payload:
 
 **2nd publication**
 
-Topic: :code:`command/sp_command/w.r1.c0`
-
-Payload:
+:code:`command/sp_command/w.r1.c0`
 
 .. code-block:: json
 
@@ -131,77 +115,48 @@ Payload:
 
 
 api/out
-++++++++
+--------
 
-Path
-_____
+**HTTP method**: :code:`GET`
 
-HTTP method: :code:`GET`
+**URL** :code:`api/in/<agent>/<subpath>?<param:1>=<value:1>&<param:2>=<value:2>`
 
-*api/in/<agent>/<subpath>?<param:1>=<value:1>&<param:2>=<value:2>*
-
-Explanation
-____________
-
-* **<agent>** is the module to which you want to send data,
+* :code:`<agent>` is the module to which you want to send data,
   for example *sp_command/status* or *sp_command/status/sp_r3c4*.
-* **<subpath>** is the subtopic of mqtt to which it will be published.
+* :code:`<subpath>` is the subtopic of mqtt to which it will be published.
   If you want to publish to several subtopics, *<subtopic>* will be omitted
   from the URL and a “subtopics” field will be created in the data sent as
   described below.
-* **<param:n>**/**<value:n>** are the parameters that... TODO
+* :code:`<param:n>`/:code:`<value:n>` are the parameters that specify the query.
 
 
-Format
-_______
+**URL examples**
 
-URLs
-~~~~~
-
-* *api/out/influx_query?*
-* *api/in/sp_command/sp_g0*
-* *api/in/sp_command/row/1*
-* *api/in/sp_command/column/2*
+* :code:`api/out/influx_query/sp/power?type=w`
+* :code:`api/out/influx_query/sp/power?operation=sum&type=w&from=1585217932.2041745`
+* :code:`api/out/influx_query/sp/power?operation=median&type=w&row=1&from=1585217932.2041745&to=1585300000.2041745`
+* :code:`api/out/influx_query/sp/status?operation=median&type=g`
+* :code:`api/out/influx_query/sp/status?operation=sum&id=w.r1.c2`
 
 
 Real example
 _____________
 
-HTTP REST request
-~~~~~~~~~~~~~~~~~~
-:code:`api/in/sp_command/`
+**HTTP REST request**
 
-.. code-block:: json
+PUT :code:`api/out/influx_query/sp/power?operation=sum&type=w&from=1585217932.2041745`
 
-   {
-       "subtopics": [
-           "m1",
-           "w.r1.c0"
-         ],
-         "payload": {"status":"OFF"}
-   }
+**MQTT publication**
 
-MQTT publications
-~~~~~~~~~~~~~~~~~~
+:code:`query/influx_query/sp/power`
 
-It will publish two times to MQTT:
-
-Topic: :code:`command/sp_command/m1`
 .. code-block:: json
 
    {
         "response_topic": "responses/api/809bd939baa44f1f87fdd1099ea05a62",
-        "data": {"status" : "OFF"}
+        "data": {
+            "operation": "sum",
+            "type": "w",
+            "from": 1585217932.2041745
+        }
    }
-
-and
-
-Topic: :code:`command/sp_command/w.r1.c0`
-.. code-block:: json
-
-   {
-        "response_topic": "responses/api/42694cca24614db48ad12f8f89be642b",
-        "data": {"status" : "OFF"}
-   }
-
-
