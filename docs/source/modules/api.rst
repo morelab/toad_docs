@@ -2,7 +2,14 @@
 api module's design
 ====================
 
+This module listens to HTTP REST requests, and relays them into MQTT,
+so that other modules can handle and respond to them, and after they handle it, :code:`api` module
+listens in MQTT for the response and it sends it back to the HTTP requester.
 
+In this section we will explain what is the design behind the HTTP REST requests and MQTT messages.
+
+HTTP REST
+----------
 
 Base path for REST HTTP requests:
 
@@ -17,6 +24,9 @@ Division into two routes so that the separation between reading and writing reso
 api/in
 -------
 
+REST
+_____
+
 **HTTP method**: :code:`PUT`
 
 **URL**: :code:`api/in/<agent>/<subpath>`
@@ -24,6 +34,8 @@ api/in
 * :code:`<agent>`: is the module to which you want to send data.
   For example :code:`sp_command/status` or :code:`sp_command/status/w.r3.c4`.
 * :code:`<subpath>`: is the subtopic of mqtt to which it will be published.
+  This is specific for each module. That is, the :code:`<subpath>` for :code:`sp_command`
+  is different from any other.
   If you want to publish to several subtopics, a :code:`subtopics` field can be
   included in the data sent as described below.
 
@@ -67,7 +79,81 @@ other agents may have completely different functionalities.
 If there are not several subtopics and the message will be sent
 directly to what is specified in the URL, the list may be empty
 or omitted. If not, the message will be sent to each topic consisting
-of: :code:`<agent>/<subtopic>`.
+of: :code:`<agent>/<subpath>/<subtopic>`.
+
+
+MQTT
+_____
+
+In order to understand how MQTT messages are formatted in IoToad check: :doc:`IoToad MQTT design <mqtt>`.
+
+:code:`api` parses the REST message and relays them to other modules through MQTT messages.
+
+The MQTT messages have two fields :code:`data` and :code:`response_topic`. In the data field is
+sent the :code:`payload` and the :code:`response_topic` is a random MQTT topic where :code:`api` module
+listens for the message reply.
+
+A MQTT message is sent for every topic in the :code:`subtopics`.
+
+**Example 1: with 'subtopics'**
+
+If the PUT data is...
+
+.. code-block:: json
+
+   {
+       "subtopics": [
+           "<subtopic:1>",
+           "<subtopic:2>"
+         ],
+         "payload": "<payload>"
+   }
+
+Will publish two MQTT messages...
+
+**1st message**
+
+:code:`<agent>/<subpath>/<subtopic:1>`
+
+.. code-block:: json
+
+    {
+        "response_topic": "<response-topic:1>"
+        "data": "<payload>"
+    }
+
+**2nd message**
+
+:code:`<agent>/<subpath>/<subtopic:2>`
+
+.. code-block:: json
+
+    {
+        "response_topic": "<response-topic:2>"
+        "data": "<payload>"
+    }
+
+
+**Example 2: without 'subtopics'**
+
+If the PUT data is...
+
+.. code-block:: json
+
+    {
+        "payload": "<payload>"
+    }
+
+Will publish a single MQTT message...
+
+:code:`<agent>/<subpath>`
+
+.. code-block:: json
+
+    {
+        "response_topic": "<response-topic>"
+        "data": "<payload>"
+    }
 
 
 Real example
@@ -75,7 +161,7 @@ _____________
 
 **HTTP REST request**
 
-GET :code:`api/in/sp_command/`
+PUT :code:`api/in/sp_command/`
 
 .. code-block:: json
 
@@ -117,9 +203,12 @@ It will publish two times to MQTT.
 api/out
 --------
 
+REST
+_____
+
 **HTTP method**: :code:`GET`
 
-**URL** :code:`api/in/<agent>/<subpath>?<param:1>=<value:1>&<param:2>=<value:2>`
+**URL**: :code:`api/in/<agent>/<subpath>?<param:1>=<value:1>&<param:2>=<value:2>`
 
 * :code:`<agent>` is the module to which you want to send data,
   for example *sp_command/status* or *sp_command/status/sp_r3c4*.
@@ -139,12 +228,42 @@ api/out
 * :code:`api/out/influx_query/sp/status?operation=sum&id=w.r1.c2`
 
 
+MQTT
+_____
+
+In order to understand how MQTT messages are formatted in IoToad check: :doc:`IoToad MQTT design <mqtt>`.
+
+The MQTT messages have two fields :code:`data` and :code:`response_topic`. In the :code:`data` field are
+sent all the GET parameters as a json, and the :code:`response_topic` is a random MQTT topic where :code:`api` module
+listens for the message reply.
+
+**Example**
+
+If the GET request is...
+
+:code:`api/in/<agent>/<subpath>?<param:1>=<value:1>&<param:2>=<value:2>`
+
+Will publish a single MQTT message...
+
+:code:`<agent>/<subpath>`
+
+.. code-block:: json
+
+    {
+        "response_topic": "<response-topic>"
+        "data": {
+            "<param:1>": "<value:1>",
+            "<param:2>": "<value:2>"
+        }
+    }
+
+
 Real example
 _____________
 
 **HTTP REST request**
 
-PUT :code:`api/out/influx_query/sp/power?operation=sum&type=w&from=1585217932.2041745`
+GET :code:`api/out/influx_query/sp/power?operation=sum&type=w&from=1585217932.2041745`
 
 **MQTT publication**
 
