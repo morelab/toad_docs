@@ -1,6 +1,9 @@
-==================
-API sp_command
-==================
+============================
+Rest API: SmartPlug command
+============================
+
+API for executing SmartPlug control
+commands (turn ON/OFF).
 
 Requirements
 -------------

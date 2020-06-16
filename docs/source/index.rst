@@ -5,6 +5,8 @@ Welcome to IoToad docs's documentation!
    :maxdepth: 2
 
    introduction
-   api
+   apis/influx_query
+   apis/sp_command
    modules
+   mqtt
    extensibility
