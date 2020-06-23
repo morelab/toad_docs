@@ -25,7 +25,7 @@ The API let you construct queries equivalent to those of InfluxDB restricted to:
 URL
 ----
 
-* :code:`iotoad.org/api/out/influx_query/{database}/{measurement}?operation={operation}{tagM}={valueM}&{tagN}={valueN}`
+* :code:`iotoad.org/api/out/influx_query/<database>/<measurement>?operation=<operation>&<tagM>=<valueM>&<tagN>=<valueN>`
 
 Examples
 ---------

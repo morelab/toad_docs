@@ -6,13 +6,13 @@ Add SmartPlugs
 ---------------
 In order to add a SmartPlug these are the steps to follow:
 
-1. Install the SmartPlug
-2. Assign an IP to the SmartPlug
+1. Install the SmartPlug.
+2. Assign an IP to the SmartPlug.
 3. In the Virtual Machine IoToad is deployed, go to :code:`~/toad_main/config/toad_sp_data/config.ini`
    and edit the :code:`IP_RANGE_START` < ip < :code:`IP_RANGE_STOP`, so that it includes the new SmartPlug IP.
 4. Update ETCD database so that it includes MAC-->SmartPlugID mapping. In order to update it,
    the ETCD REST API must be used: :code:`curl http://<ip>:2379/v2/keys/smartplugs/mac_to_id/<mac-address> -XPUT -d value="<smartplug-id>"`.
-   e.g. :code:`curl http://127.0.0.1:2379/v2/keys/smartplugs/mac_to_id/AC:84:C6:59:D9:A1 -XPUT -d value="sp_w.r0.c1"`
+   e.g. :code:`curl http://127.0.0.1:2379/v2/keys/smartplugs/mac_to_id/AC:84:C6:59:D9:A1 -XPUT -d value="sp_w.r0.c1"`.
 
 Add devices
 ------------
@@ -54,7 +54,8 @@ Some examples:
 
     [
       {"bn":"sp_", "u":"W",},
-      {"n":"w.r1.c1/power","v":1.2}
+      {"n":"w.r1.c1/power","v":1.2},
+      {"n":"g7/power","v":3.4}
     ]
 
 **data/amazon_devices/influx_data/alexa**
@@ -63,7 +64,8 @@ Some examples:
 
     [
       {"bn":"echo-dot_", "u":"W",},
-      {"n":"g2/power","v":1.2}
+      {"n":"g2/power","v":1.2},
+      {"n":"x.r1.c0/power","v":90.87},
     ]
 
 
@@ -80,8 +82,9 @@ and payload. So, for adding new API calls you must know how are
 the API calls transformed into MQTT messages, and you have to
 implement a component that listens to them, and returns an answer correctly.
 
-Check :doc:`MQTT <modules/mqtt>` to understand how the REST API
-calls are transformed into MQTT messages.
+Check :doc:`api <modules/api>` to understand how the REST API
+calls are transformed into MQTT messages, and :doc:`MQTT <modules/mqtt>`
+to understand how MQTT messages and topics must be specified.
 
 Add others: frameworks, databases, etc.
 ----------------------------------------

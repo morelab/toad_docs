@@ -118,7 +118,7 @@ Will publish two MQTT messages...
 .. code-block:: json
 
     {
-        "response_topic": "<response-topic:1>"
+        "response_topic": "<response-topic:1>",
         "data": "<payload>"
     }
 
@@ -129,7 +129,7 @@ Will publish two MQTT messages...
 .. code-block:: json
 
     {
-        "response_topic": "<response-topic:2>"
+        "response_topic": "<response-topic:2>",
         "data": "<payload>"
     }
 
@@ -151,7 +151,7 @@ Will publish a single MQTT message...
 .. code-block:: json
 
     {
-        "response_topic": "<response-topic>"
+        "response_topic": "<response-topic>",
         "data": "<payload>"
     }
 

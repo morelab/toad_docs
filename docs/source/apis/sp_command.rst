@@ -16,9 +16,9 @@ Requirements
 URL
 ----
 
-* :code:`iotoad.org/api/in/sp_command/{ID}`
-* :code:`iotoad.org/api/in/sp_command/row/{row}`
-* :code:`iotoad.org/api/in/sp_command/column/{column}`
+* :code:`iotoad.org/api/in/sp_command/<ID>`
+* :code:`iotoad.org/api/in/sp_command/row/<row>`
+* :code:`iotoad.org/api/in/sp_command/column/<column>`
 
 
 Examples
