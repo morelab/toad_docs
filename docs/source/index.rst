@@ -8,5 +8,4 @@ Welcome to IoToad docs's documentation!
    apis/influx_query
    apis/sp_command
    modules
-   mqtt
    extensibility

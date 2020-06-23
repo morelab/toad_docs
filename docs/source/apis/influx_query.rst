@@ -1,6 +1,6 @@
-=======================
-Rest API: Influx query
-=======================
+==================
+API: Influx query
+==================
 
 API for executing SmartPlug data queries to InfluxDB.
 Even if it is intended for SmartPlugs, it is designed for querying any
@@ -16,7 +16,7 @@ For a deeper understanding check information about `InfluxDB <https://v2.docs.in
 
 The API let you construct queries equivalent to those of InfluxDB restricted to:
 
-* Query a single measurement per query
+* A single measurement per query
 * Filter by tags
 * Use aggregator and selectors defined in
   `InfluxDB functions <https://docs.influxdata.com/influxdb/v1.7/query_language/functions/>`_

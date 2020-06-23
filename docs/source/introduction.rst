@@ -37,14 +37,14 @@ These were all the requirements:
 Proposed solution
 -------------------
 As a result we created an IoT system where each workplace,
-conference room and printer is plugged to an SmartPlug_.
+group room and printer is plugged to an SmartPlug_.
 
 .. _SmartPlug: https://www.tp-link.com/en/home-networking/smart-plug/hs110/
 
-The gathered data is stored in a time series database (influxDB).
+The gathered data is stored in a time series database: influxDB.
 
 Also a RESTful API is exposed through which the data can be retrieved, and
-SmartPlugs are controlled (turned ON/OFF).
+SmartPlugs are controlled: turned ON/OFF.
 
 System's overview
 ------------------
