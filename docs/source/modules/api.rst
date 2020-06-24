@@ -241,11 +241,11 @@ listens for the message reply.
 
 If the GET request is...
 
-:code:`api/in/<agent>/<subpath>?<param:1>=<value:1>&<param:2>=<value:2>`
+:code:`api/out/<agent>/<subpath>?<param:1>=<value:1>&<param:2>=<value:2>`
 
 Will publish a single MQTT message...
 
-:code:`<agent>/<subpath>`
+:code:`data/<agent>/<subpath>`
 
 .. code-block:: json
 
