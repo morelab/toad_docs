@@ -41,6 +41,8 @@ This module is responsible for querying InfluxDB and returning the response.
 :code:`influx_query` subscribes to :code:`query/influx_query/#` MQTT topic,
 so that the topics are :code:`query/influx_query/<database>/<measurement>`.
 
+.. image:: _static/imgs/flow-influx-query.svg
+
 The message recieved follows the format specified in :doc:`MQTT <modules/mqtt>`,
 where the query arguments are inside the :code:`data` field. The message also conatains
 the :code:`response_topic` field that is used for later publishing the response to.
@@ -76,6 +78,11 @@ Following the example above:
         ]
    }
 
+sp_command
+-----------
+
+sp_data
+--------
 
 influx_data
 ------------

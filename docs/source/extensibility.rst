@@ -70,8 +70,8 @@ Some examples:
 
 
 
-Add API calls
---------------
+Add new API calls
+------------------
 We have only implemented an API for controlling the SmartPlugs
 and a second API for querying data from InfluxDB.
 
@@ -81,6 +81,35 @@ that takes the API call and it transforms it into a MQTT topic
 and payload. So, for adding new API calls you must know how are
 the API calls transformed into MQTT messages, and you have to
 implement a component that listens to them, and returns an answer correctly.
+
+For example, if you want to add an API call such as:
+
+* :code:`api/out/alexa_rankings/id/echo-dot-12313?ordered=high-to-low`
+
+The :code:`api` module would automatically relay the API call to MQTT such as:
+
+MQTT topic: :code:`query/alexa_rankings/id/echo-dot-12313`
+
+.. code-block:: json
+
+    {
+        "response_topic": "responses/api/809bd939baa44f1f87fdd1099ea05a62"
+        "data": {
+            "ordered": "high-to-low",
+        }
+    }
+
+
+So, the new hook must listen in the MQTT topic:
+
+* :code:`query/alexa_rankings/#`
+
+And then:
+
+* Grab the information from the topic or the payload :code:`data` field.
+* Perform the query: querying a database, doing some calculations, etc.
+* Return the query result, publishing a message into
+  :code:`responses/api/809bd939baa44f1f87fdd1099ea05a62` MQTT topic.
 
 Check :doc:`api <modules/api>` to understand how the REST API
 calls are transformed into MQTT messages, and :doc:`MQTT <modules/mqtt>`
