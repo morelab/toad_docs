@@ -236,18 +236,37 @@
                     "SenMLDocumentPower": {
                         "type": "array",
                         "items": {"anyOf": [{"$ref": "#/components/schemas/SenMLMainMeasurementPower"}, {"$ref": "#/components/schemas/SenMLSubMeasurementPower"}]},
-                        "example": [{"bn": "sp_w.r1.c2", "unit": "W"}, {"v": 10.4, "t": 12345678}, {
-                            "v": 20.1,
-                            "t": 12345679
-                        }]
+                        "example": [
+                          {
+                            "bn": "power"
+                          },
+                          {
+                            "n": "/sp_w.r0.c0",
+                            "t": 1.592129928200473e+18,
+                            "u": "W",
+                            "v": 7.541
+                          },
+                          {
+                            "n": "/sp_w.r0.c0",
+                            "t": 1.592129933279374e+18,
+                            "u": "W",
+                            "v": 7.627
+                          },
+                          {
+                            "n": "/sp_w.r0.c0",
+                            "t": 1.592129938363966e+18,
+                            "u": "W",
+                            "v": 7.519
+                          }
+                        ]
                     },
                     "SenMLMainMeasurementPower": {
                         "type": "object",
                         "properties": {
                             "bn": {
                                 "type": "string",
-                                "description": "String concatenating Device ID and the type of resource. 'deviceID/resourceType'",
-                                "example": "sp_w.r3.c4/power"
+                                "description": "String concatenating Device ID and the type of resource. 'resourceType/deviceID'",
+                                "example": "power/sp_w.r3.c4"
                             }, "bu": {"type": "string", "description": "Resource unit", "example": "W"}
                         }
                     },
@@ -266,18 +285,18 @@
                     "SenMLDocumentStatus": {
                         "type": "array",
                         "items": {"anyOf": [{"$ref": "#/components/schemas/SenMLMainMeasurementStatus"}, {"$ref": "#/components/schemas/SenMLSubMeasurementStatus"}]},
-                        "example": [{"bn": "m2", "unit": "S"}, {"v": 0, "t": 12345678}, {
-                            "v": 1,
+                        "example": [{"bn": "status", "unit": "S"}, {"n": "m2", "v": 0, "t": 12345678}, {
+                            "n": "m2", "v": 1,
                             "t": 12345679
-                        }, {"v": 0, "t": 12345680}]
+                        }, {"n": "m2", "v": 0, "t": 12345680}]
                     },
                     "SenMLMainMeasurementStatus": {
                         "type": "object",
                         "properties": {
                             "bn": {
                                 "type": "string",
-                                "description": "String concatenating Device ID and the type of resource. 'deviceID/resourceType'",
-                                "example": "sp_w.r3.c4/power"
+                                "description": "String concatenating Device ID and the type of resource. 'resourceType/deviceID'",
+                                "example": "status/sp_w.r3.c4"
                             }, "bu": {"type": "string", "description": "Resource unit", "example": "W"}
                         }
                     },
