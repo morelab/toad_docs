@@ -73,7 +73,7 @@
                             "name": "id",
                             "in": "query",
                             "required": false,
-                            "schema": {"type": "string", "example": "w.r0.c2"},
+                            "schema": {"type": "string", "example": "sp_w.r0.c2"},
                             "description": "Device ID"
                         }, {
                             "name": "type",
@@ -131,7 +131,7 @@
                             "name": "id",
                             "in": "query",
                             "required": false,
-                            "schema": {"type": "string", "example": "w.r0.c2"},
+                            "schema": {"type": "string", "example": "sp_w.r0.c2"},
                             "description": "Device ID"
                         }, {
                             "name": "type",
@@ -189,7 +189,7 @@
                             "name": "id",
                             "in": "query",
                             "required": false,
-                            "schema": {"type": "string", "example": "w.r0.c2"},
+                            "schema": {"type": "string", "example": "sp_w.r0.c2"},
                             "description": "Device ID"
                         }, {
                             "name": "type",
@@ -236,7 +236,7 @@
                     "SenMLDocumentPower": {
                         "type": "array",
                         "items": {"anyOf": [{"$ref": "#/components/schemas/SenMLMainMeasurementPower"}, {"$ref": "#/components/schemas/SenMLSubMeasurementPower"}]},
-                        "example": [{"bn": "w.r1.r2", "unit": "W"}, {"v": 10.4, "t": 12345678}, {
+                        "example": [{"bn": "sp_w.r1.c2", "unit": "W"}, {"v": 10.4, "t": 12345678}, {
                             "v": 20.1,
                             "t": 12345679
                         }]
@@ -247,7 +247,7 @@
                             "bn": {
                                 "type": "string",
                                 "description": "String concatenating Device ID and the type of resource. 'deviceID/resourceType'",
-                                "example": "w.r3.c4/power"
+                                "example": "sp_w.r3.c4/power"
                             }, "bu": {"type": "string", "description": "Resource unit", "example": "W"}
                         }
                     },
@@ -277,7 +277,7 @@
                             "bn": {
                                 "type": "string",
                                 "description": "String concatenating Device ID and the type of resource. 'deviceID/resourceType'",
-                                "example": "w.r3.c4/power"
+                                "example": "sp_w.r3.c4/power"
                             }, "bu": {"type": "string", "description": "Resource unit", "example": "W"}
                         }
                     },

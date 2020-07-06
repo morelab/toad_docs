@@ -34,7 +34,7 @@ Examples
 * :code:`iotoad.org/api/out/influx_query/sp/power?operation=sum&type=w&from=1585217932.2041745`
 * :code:`iotoad.org/api/out/influx_query/sp/power?operation=median&type=w&row=1&from=1585217932.2041745&to=1585300000.2041745`
 * :code:`iotoad.org/api/out/influx_query/sp/status?operation=median&type=g`
-* :code:`iotoad.org/api/out/influx_query/sp/status?operation=sum&id=w.r1.c2`
+* :code:`iotoad.org/api/out/influx_query/sp/status?operation=sum&id=sp_w.r1.c2`
 
 
 OpenAPI specification
